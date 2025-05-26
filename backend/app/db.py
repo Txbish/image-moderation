@@ -1,12 +1,16 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 from dotenv import load_dotenv
-import uuid
 from datetime import datetime, timezone
+from fastapi import Request
 
 load_dotenv()
+
 client = None
 db = None
+
+def get_db(request: Request):
+    return request.app.state.db
 
 async def connect_db():
     global client, db
@@ -28,3 +32,5 @@ async def connect_db():
         {"$set": {"token": user_token, "isAdmin": False, "createdAt": now}},
         upsert=True
     )
+
+    return db  
