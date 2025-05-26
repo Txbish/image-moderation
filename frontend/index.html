@@ -3,8 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Image Moderation API</title>
+    <title>Image Moderation Dashboard</title>
     <style>
+      :root {
+        --primary-color: #2563eb;
+        --primary-dark: #1d4ed8;
+        --primary-light: #3b82f6;
+        --secondary-color: #64748b;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --background-color: #f8fafc;
+        --surface-color: #ffffff;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --border-color: #e2e8f0;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+          0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+          0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+          0 8px 10px -6px rgb(0 0 0 / 0.1);
+        --radius-sm: 0.375rem;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-xl: 1rem;
+      }
+
       * {
         margin: 0;
         padding: 0;
@@ -12,75 +38,84 @@
       }
 
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-primary);
+        line-height: 1.6;
         min-height: 100vh;
-        padding: 20px;
       }
 
       .container {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        padding: 40px;
-        max-width: 800px;
+        max-width: 1400px;
         margin: 0 auto;
-        transition: all 0.3s ease;
+        padding: 1.5rem;
       }
 
-      .container:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-      }
-
+      /* Header Styles */
       .header {
         text-align: center;
-        margin-bottom: 40px;
+        margin-bottom: 3rem;
+        padding: 2rem 0;
       }
 
-      .header h1 {
-        color: #333;
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 10px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+      .header-title {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--primary-light)
+        );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.025em;
       }
 
-      .header p {
-        color: #666;
-        font-size: 1.1rem;
+      .header-subtitle {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        font-weight: 400;
       }
 
-      .tabs {
+      /* Navigation Tabs */
+      .nav-tabs {
         display: flex;
-        margin-bottom: 30px;
-        background: #f8f9fa;
-        border-radius: 15px;
-        padding: 5px;
+        background: var(--surface-color);
+        border-radius: var(--radius-lg);
+        padding: 0.25rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
       }
 
-      .tab {
+      .nav-tab {
         flex: 1;
-        padding: 15px 20px;
+        padding: 0.75rem 1.5rem;
         text-align: center;
-        border-radius: 10px;
+        background: transparent;
+        border: none;
+        border-radius: var(--radius-md);
         cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: 600;
-        color: #666;
+        font-weight: 500;
+        color: var(--text-secondary);
+        transition: all 0.2s ease;
       }
 
-      .tab.active {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+      .nav-tab.active {
+        background: var(--primary-color);
         color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        box-shadow: var(--shadow-sm);
       }
 
+      .nav-tab:hover:not(.active) {
+        background: var(--background-color);
+        color: var(--text-primary);
+      }
+
+      /* Tab Content */
       .tab-content {
         display: none;
       }
@@ -89,765 +124,1144 @@
         display: block;
       }
 
-      .section {
-        margin-bottom: 30px;
-      }
-
-      .section h2 {
-        color: #333;
-        margin-bottom: 20px;
-        font-size: 1.5rem;
-        font-weight: 600;
-      }
-
-      .input-group {
-        margin-bottom: 20px;
-      }
-
-      .input-group label {
-        display: block;
-        margin-bottom: 8px;
-        color: #555;
-        font-weight: 500;
-      }
-
-      .input-group input[type="text"],
-      .input-group input[type="file"],
-      .input-group select {
-        width: 100%;
-        padding: 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        font-size: 16px;
+      /* Card Styles */
+      .card {
+        background: var(--surface-color);
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
         transition: all 0.3s ease;
-        background: #fafafa;
+        margin-bottom: 1.5rem;
       }
 
-      .input-group input[type="text"]:focus,
-      .input-group input[type="file"]:focus,
-      .input-group select:focus {
-        outline: none;
-        border-color: #667eea;
-        background: white;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-      }
-
-      .btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        margin-right: 10px;
-        margin-bottom: 10px;
-      }
-
-      .btn:hover {
+      .card:hover {
+        box-shadow: var(--shadow-lg);
         transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .card-icon {
+        font-size: 1.5rem;
+        margin-right: 0.75rem;
+      }
+
+      .card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      /* Grid Layout */
+      .grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .grid-cols-1 {
+        grid-template-columns: 1fr;
+      }
+      .grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .grid-cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .grid-cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      /* Status Indicators */
+      .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-lg);
+        font-weight: 500;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+      }
+
+      .status-success {
+        background: rgb(220 252 231);
+        color: rgb(22 101 52);
+        border: 1px solid rgb(187 247 208);
+      }
+
+      .status-error {
+        background: rgb(254 242 242);
+        color: rgb(153 27 27);
+        border: 1px solid rgb(252 165 165);
+      }
+
+      .status-warning {
+        background: rgb(255 251 235);
+        color: rgb(146 64 14);
+        border: 1px solid rgb(253 230 138);
+      }
+
+      /* Form Elements */
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-label {
+        display: block;
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        background: var(--surface-color);
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+      }
+
+      .form-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .form-checkbox input[type="checkbox"] {
+        width: 1rem;
+        height: 1rem;
+        accent-color: var(--primary-color);
+      }
+
+      /* Button Styles */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: var(--radius-md);
+        font-weight: 500;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        gap: 0.5rem;
+      }
+
+      .btn-primary {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .btn-secondary {
+        background: var(--secondary-color);
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: rgb(71 85 105);
+      }
+
+      .btn-danger {
+        background: var(--danger-color);
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: rgb(220 38 38);
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+      }
+
+      .btn-outline:hover {
+        background: var(--background-color);
       }
 
       .btn:disabled {
-        background: #ccc;
+        opacity: 0.5;
         cursor: not-allowed;
         transform: none;
-        box-shadow: none;
       }
 
-      .btn.danger {
-        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-      }
-
-      .btn.danger:hover {
-        box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
-      }
-
-      .btn.success {
-        background: linear-gradient(135deg, #51cf66, #40c057);
-      }
-
-      .btn.success:hover {
-        box-shadow: 0 10px 20px rgba(81, 207, 102, 0.3);
-      }
-
-      .status {
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        font-weight: 500;
-        display: none;
-      }
-
-      .status.success {
-        background: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-      }
-
-      .status.error {
-        background: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-      }
-
-      .results {
-        background: #f8f9fa;
-        border-radius: 15px;
-        padding: 25px;
-        margin-top: 20px;
-        display: none;
-      }
-
-      .results h3 {
-        color: #333;
-        margin-bottom: 20px;
-        font-size: 1.3rem;
-        font-weight: 600;
-      }
-
-      .score-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-        padding: 15px;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-      }
-
-      .score-label {
-        font-weight: 600;
-        color: #333;
-        text-transform: capitalize;
-      }
-
-      .score-value {
-        font-weight: 700;
-        font-size: 1.1rem;
-      }
-
-      .score-bar {
-        width: 100px;
-        height: 8px;
-        background: #e0e0e0;
-        border-radius: 4px;
-        overflow: hidden;
-        margin-left: 15px;
-      }
-
-      .score-fill {
-        height: 100%;
-        transition: width 0.5s ease;
-        border-radius: 4px;
-      }
-
-      .low {
-        background: #28a745;
-      }
-      .medium {
-        background: #ffc107;
-      }
-      .high {
-        background: #dc3545;
-      }
-
+      /* Upload Area */
       .upload-area {
-        border: 2px dashed #667eea;
-        border-radius: 15px;
-        padding: 40px;
+        border: 2px dashed var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 3rem 2rem;
         text-align: center;
-        background: #fafbff;
         transition: all 0.3s ease;
         cursor: pointer;
-        margin-bottom: 20px;
+        background: var(--background-color);
       }
 
       .upload-area:hover {
-        border-color: #764ba2;
-        background: #f0f2ff;
+        border-color: var(--primary-color);
+        background: rgb(239 246 255);
       }
 
       .upload-area.dragover {
-        border-color: #764ba2;
-        background: #e8ebff;
+        border-color: var(--primary-color);
+        background: rgb(219 234 254);
         transform: scale(1.02);
       }
 
       .upload-icon {
         font-size: 3rem;
-        margin-bottom: 15px;
-        color: #667eea;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
       }
 
       .upload-text {
-        color: #666;
-        font-size: 1.1rem;
+        color: var(--text-secondary);
+        font-size: 1.125rem;
+        margin-bottom: 0.5rem;
       }
 
-      .hidden {
-        display: none;
+      .upload-subtext {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
       }
 
-      .token-status {
-        padding: 10px 15px;
-        background: #d4edda;
-        color: #155724;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        display: none;
-        font-weight: 500;
-        border: 1px solid #c3e6cb;
+      /* Preview */
+      .preview-container {
+        margin: 1.5rem 0;
+        text-align: center;
       }
 
-      .tokens-list {
-        background: #f8f9fa;
-        border-radius: 15px;
-        padding: 20px;
-        margin-top: 20px;
+      .preview-image {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+      }
+
+      /* Results */
+      .results-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .result-card {
+        background: var(--background-color);
+        padding: 1.5rem;
+        border-radius: var(--radius-lg);
+        text-align: center;
+        border: 1px solid var(--border-color);
+      }
+
+      .result-label {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        text-transform: capitalize;
+        font-size: 0.875rem;
+      }
+
+      .result-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 0.75rem;
+      }
+
+      .result-bar {
+        width: 100%;
+        height: 0.5rem;
+        background: var(--border-color);
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+      }
+
+      .result-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--success-color),
+          var(--warning-color),
+          var(--danger-color)
+        );
+        transition: width 0.5s ease;
+        border-radius: var(--radius-sm);
+      }
+
+      /* Token Management */
+      .token-list {
+        margin-top: 1rem;
       }
 
       .token-item {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 15px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        background: var(--background-color);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 1rem;
+        margin-bottom: 0.75rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
       }
 
       .token-info {
         flex: 1;
-        min-width: 300px;
       }
 
       .token-value {
-        font-family: "Courier New", monospace;
-        background: #f1f3f4;
-        padding: 8px 12px;
-        border-radius: 6px;
-        font-size: 14px;
-        word-break: break-all;
-        margin-bottom: 10px;
+        font-family: "JetBrains Mono", "Fira Code", monospace;
+        background: var(--surface-color);
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+        border: 1px solid var(--border-color);
       }
 
       .token-meta {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
         display: flex;
-        gap: 15px;
-        font-size: 14px;
-        color: #666;
+        align-items: center;
+        gap: 0.5rem;
       }
 
-      .admin-badge {
-        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-        color: white;
-        padding: 4px 8px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 600;
+      .badge {
+        padding: 0.125rem 0.5rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+        font-weight: 500;
       }
 
-      .user-badge {
-        background: linear-gradient(135deg, #51cf66, #40c057);
-        color: white;
-        padding: 4px 8px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 600;
+      .badge-admin {
+        background: rgb(220 252 231);
+        color: rgb(22 101 52);
       }
 
-      .flex-row {
+      .badge-user {
+        background: rgb(241 245 249);
+        color: rgb(71 85 105);
+      }
+
+      /* Quick Actions */
+      .quick-actions {
         display: flex;
-        gap: 15px;
-        align-items: end;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
       }
 
-      .flex-row .input-group {
-        flex: 1;
+      .quick-action {
+        background: var(--background-color);
+        border: 1px solid var(--border-color);
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
       }
 
+      .quick-action:hover {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+      }
+
+      /* Loading */
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .spinner {
+        width: 2rem;
+        height: 2rem;
+        border: 2px solid var(--border-color);
+        border-top: 2px solid var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Alerts */
+      .alert {
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .alert-success {
+        background: rgb(220 252 231);
+        color: rgb(22 101 52);
+        border: 1px solid rgb(187 247 208);
+      }
+
+      .alert-error {
+        background: rgb(254 242 242);
+        color: rgb(153 27 27);
+        border: 1px solid rgb(252 165 165);
+      }
+
+      /* Responsive Design */
       @media (max-width: 768px) {
         .container {
-          padding: 20px;
-          margin: 10px;
+          padding: 1rem;
         }
 
-        .header h1 {
+        .header-title {
           font-size: 2rem;
         }
 
-        .upload-area {
-          padding: 20px;
-        }
-
-        .tabs {
+        .nav-tabs {
           flex-direction: column;
         }
 
-        .flex-row {
-          flex-direction: column;
+        .nav-tab {
+          text-align: left;
+        }
+
+        .card {
+          padding: 1.5rem;
+        }
+
+        .grid-cols-2,
+        .grid-cols-3,
+        .grid-cols-4 {
+          grid-template-columns: 1fr;
         }
 
         .token-item {
           flex-direction: column;
-          align-items: stretch;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
+        .quick-actions {
+          justify-content: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .upload-area {
+          padding: 2rem 1rem;
+        }
+
+        .upload-icon {
+          font-size: 2rem;
+        }
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .quick-actions {
+          flex-direction: column;
+        }
+      }
+
+      /* Animations */
+      .fade-in {
+        animation: fadeIn 0.3s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .slide-up {
+        animation: slideUp 0.3s ease-out;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <div class="header">
-        <h1>🛡️ Image Moderation</h1>
-        <p>Secure content analysis with AI-powered safety detection</p>
-      </div>
+      <!-- Header -->
+      <header class="header">
+        <h1 class="header-title">🛡️ Image Moderation</h1>
+        <p class="header-subtitle">
+          AI-powered content safety analysis for your images
+        </p>
+      </header>
 
-      <div class="tabs">
-        <div class="tab active" data-tab="moderation">📷 Image Moderation</div>
-        <div class="tab" data-tab="admin">⚙️ Token Management</div>
-      </div>
+      <!-- Navigation -->
+      <nav class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('moderation')">
+          📸 Moderation
+        </button>
+        <button class="nav-tab" onclick="switchTab('authentication')">
+          🔐 Authentication
+        </button>
+        <button
+          class="nav-tab"
+          id="adminTab"
+          onclick="switchTab('admin')"
+          style="display: none"
+        >
+          ⚙️ Admin Panel
+        </button>
+      </nav>
 
-      <!-- Image Moderation Tab -->
-      <div class="tab-content active" id="moderation">
-        <div class="section">
-          <h2>🔐 Authentication</h2>
-          <div class="token-status" id="tokenStatus">
-            ✅ Token authenticated successfully
-          </div>
-          <div class="input-group">
-            <label for="tokenInput">Bearer Token:</label>
-            <input
-              type="text"
-              id="tokenInput"
-              placeholder="Enter your bearer token..."
-            />
-          </div>
-          <button class="btn" id="setTokenBtn">Set Token</button>
-        </div>
-
-        <div class="section hidden" id="uploadSection">
-          <h2>📁 Upload Image</h2>
-          <div class="upload-area" id="uploadArea">
-            <div class="upload-icon">📷</div>
-            <div class="upload-text">
-              Click to select an image or drag and drop here
-              <br /><small>Supported formats: JPG, PNG, GIF, WebP</small>
+      <!-- Moderation Tab -->
+      <div id="moderation" class="tab-content active">
+        <div class="grid grid-cols-1">
+          <!-- Token Status Card -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-icon">🔑</span>
+              <h2 class="card-title">Authentication Status</h2>
+            </div>
+            <div id="tokenStatus" class="status-indicator status-error">
+              ❌ No token configured
             </div>
           </div>
-          <input type="file" id="fileInput" accept="image/*" class="hidden" />
-          <button class="btn" id="moderateBtn" disabled>Analyze Image</button>
+
+          <!-- Upload Card -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-icon">📤</span>
+              <h2 class="card-title">Upload Image</h2>
+            </div>
+
+            <div
+              class="upload-area"
+              onclick="document.getElementById('fileInput').click()"
+              ondrop="handleDrop(event)"
+              ondragover="handleDragOver(event)"
+              ondragleave="handleDragLeave(event)"
+            >
+              <div class="upload-icon">📁</div>
+              <div class="upload-text">
+                Click to select an image or drag & drop here
+              </div>
+              <div class="upload-subtext">Supports JPG, PNG, GIF formats</div>
+            </div>
+
+            <input
+              type="file"
+              id="fileInput"
+              style="display: none"
+              accept="image/*"
+              onchange="handleFileSelect(event)"
+            />
+
+            <div
+              id="previewContainer"
+              class="preview-container"
+              style="display: none"
+            >
+              <img id="previewImage" class="preview-image" alt="Preview" />
+            </div>
+
+            <div style="margin-top: 1rem">
+              <button
+                class="btn btn-primary"
+                onclick="moderateImage()"
+                id="moderateBtn"
+                disabled
+              >
+                🔍 Analyze Image
+              </button>
+            </div>
+
+            <div id="loading" class="loading">
+              <div class="spinner"></div>
+              <p>Analyzing image content...</p>
+            </div>
+          </div>
+
+          <!-- Results Card -->
+          <div class="card" id="resultsCard" style="display: none">
+            <div class="card-header">
+              <span class="card-icon">📊</span>
+              <h2 class="card-title">Analysis Results</h2>
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <div class="results-grid" id="resultsGrid">
+              <!-- Results will be populated here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Authentication Tab -->
+      <div id="authentication" class="tab-content">
+        <div class="grid grid-cols-1">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-icon">🔐</span>
+              <h2 class="card-title">Token Management</h2>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="tokenInput">Bearer Token</label>
+              <input
+                type="text"
+                id="tokenInput"
+                class="form-input"
+                placeholder="Enter your bearer token"
+              />
+            </div>
+
+            <div style="margin-bottom: 1.5rem">
+              <button class="btn btn-primary" onclick="saveToken()">
+                💾 Save Token
+              </button>
+              <button class="btn btn-secondary" onclick="clearToken()">
+                🗑️ Clear Token
+              </button>
+            </div>
+
+            <div>
+              <p class="form-label">Quick Access Tokens</p>
+              <div class="quick-actions">
+                <div
+                  class="quick-action"
+                  onclick="useQuickToken('admin-seed-token')"
+                >
+                  👑 Admin Token
+                </div>
+                <div
+                  class="quick-action"
+                  onclick="useQuickToken('user-seed-token')"
+                >
+                  👤 User Token
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- Admin Tab -->
-      <div class="tab-content" id="admin">
-        <div class="section">
-          <h2>👑 Admin Panel</h2>
-          <div class="token-status" id="adminTokenStatus">
-            ✅ Admin access verified
-          </div>
-          <div class="input-group">
-            <label for="adminTokenInput">Admin Bearer Token:</label>
-            <input
-              type="text"
-              id="adminTokenInput"
-              placeholder="Enter admin token..."
-            />
-          </div>
-          <button class="btn" id="setAdminTokenBtn">Set Admin Token</button>
-        </div>
-
-        <div class="section hidden" id="adminSection">
-          <h2>🆕 Create New Token</h2>
-          <div class="flex-row">
-            <div class="input-group">
-              <label for="tokenTypeSelect">Token Type:</label>
-              <select id="tokenTypeSelect">
-                <option value="false">User Token</option>
-                <option value="true">Admin Token</option>
-              </select>
+      <div id="admin" class="tab-content">
+        <div class="grid grid-cols-1">
+          <!-- Create Token Card -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-icon">➕</span>
+              <h2 class="card-title">Create New Token</h2>
             </div>
-            <button class="btn success" id="createTokenBtn">
-              Create Token
+
+            <div class="form-checkbox">
+              <input type="checkbox" id="isAdminCheck" />
+              <label for="isAdminCheck">Grant admin privileges</label>
+            </div>
+
+            <button class="btn btn-primary" onclick="createToken()">
+              🎫 Create Token
             </button>
           </div>
 
-          <h2>📋 Existing Tokens</h2>
-          <button class="btn" id="refreshTokensBtn">🔄 Refresh List</button>
-          <div class="tokens-list" id="tokensList">
-            <p>Click "Refresh List" to load tokens...</p>
+          <!-- Token List Card -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-icon">📋</span>
+              <h2 class="card-title">Existing Tokens</h2>
+            </div>
+
+            <button class="btn btn-outline" onclick="loadTokens()">
+              🔄 Refresh Tokens
+            </button>
+
+            <div id="tokensList" class="token-list">
+              <!-- Tokens will be loaded here -->
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="status" id="status"></div>
-
-      <div class="results" id="results">
-        <h3>🔍 Analysis Results</h3>
-        <div id="scoresContainer"></div>
       </div>
     </div>
 
     <script>
       const API_BASE = "http://localhost:7000";
-      let authToken = "";
-      let adminToken = "";
       let selectedFile = null;
+      let isAdmin = false;
 
-      // DOM elements
-      const tabs = document.querySelectorAll(".tab");
-      const tabContents = document.querySelectorAll(".tab-content");
+      // Initialize the application
+      document.addEventListener("DOMContentLoaded", function () {
+        loadStoredToken();
+      });
 
-      // Moderation tab elements
-      const tokenInput = document.getElementById("tokenInput");
-      const setTokenBtn = document.getElementById("setTokenBtn");
-      const uploadSection = document.getElementById("uploadSection");
-      const tokenStatus = document.getElementById("tokenStatus");
-      const uploadArea = document.getElementById("uploadArea");
-      const fileInput = document.getElementById("fileInput");
-      const moderateBtn = document.getElementById("moderateBtn");
-
-      // Admin tab elements
-      const adminTokenInput = document.getElementById("adminTokenInput");
-      const setAdminTokenBtn = document.getElementById("setAdminTokenBtn");
-      const adminSection = document.getElementById("adminSection");
-      const adminTokenStatus = document.getElementById("adminTokenStatus");
-      const tokenTypeSelect = document.getElementById("tokenTypeSelect");
-      const createTokenBtn = document.getElementById("createTokenBtn");
-      const refreshTokensBtn = document.getElementById("refreshTokensBtn");
-      const tokensList = document.getElementById("tokensList");
-
-      // Common elements
-      const status = document.getElementById("status");
-      const results = document.getElementById("results");
-      const scoresContainer = document.getElementById("scoresContainer");
-
-      // Tab switching
-      tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-          const targetTab = tab.dataset.tab;
-
-          tabs.forEach((t) => t.classList.remove("active"));
-          tabContents.forEach((tc) => tc.classList.remove("active"));
-
-          tab.classList.add("active");
-          document.getElementById(targetTab).classList.add("active");
+      // Tab Management
+      function switchTab(tabName) {
+        document.querySelectorAll(".tab-content").forEach((tab) => {
+          tab.classList.remove("active");
         });
-      });
-
-      // Check for existing tokens on page load
-      const savedToken = sessionStorage.getItem("moderationToken");
-      const savedAdminToken = sessionStorage.getItem("adminToken");
-
-      if (savedToken) {
-        tokenInput.value = savedToken;
-        setToken();
+        document.querySelectorAll(".nav-tab").forEach((tab) => {
+          tab.classList.remove("active");
+        });
+        document.getElementById(tabName).classList.add("active");
+        event.target.classList.add("active");
+        document.getElementById(tabName).classList.add("fade-in");
       }
 
-      if (savedAdminToken) {
-        adminTokenInput.value = savedAdminToken;
-        setAdminToken();
+      // Token Management
+      function loadStoredToken() {
+        const token = localStorage.getItem("moderationToken");
+        if (token) {
+          document.getElementById("tokenInput").value = token;
+          updateTokenStatus(true, token);
+          checkAdminStatus();
+        }
       }
 
-      // Moderation functionality
-      setTokenBtn.addEventListener("click", setToken);
-      tokenInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") setToken();
-      });
+      function saveToken() {
+        const token = document.getElementById("tokenInput").value.trim();
+        if (token) {
+          localStorage.setItem("moderationToken", token);
+          updateTokenStatus(true, token);
+          showAlert("Token saved successfully!", "success");
+          checkAdminStatus();
+        } else {
+          showAlert("Please enter a valid token", "error");
+        }
+      }
 
-      function setToken() {
-        const token = tokenInput.value.trim();
+      function clearToken() {
+        localStorage.removeItem("moderationToken");
+        document.getElementById("tokenInput").value = "";
+        updateTokenStatus(false);
+        hideAdminPanel();
+        isAdmin = false;
+        showAlert("Token cleared", "success");
+      }
+
+      function useQuickToken(token) {
+        document.getElementById("tokenInput").value = token;
+        saveToken();
+      }
+
+      function updateTokenStatus(isValid, token = "") {
+        const statusElement = document.getElementById("tokenStatus");
+        const moderateBtn = document.getElementById("moderateBtn");
+
+        if (isValid) {
+          statusElement.className = "status-indicator status-success";
+          statusElement.innerHTML = `✅ Token configured: ${token.substring(
+            0,
+            20
+          )}...`;
+          if (selectedFile) {
+            moderateBtn.disabled = false;
+          }
+        } else {
+          statusElement.className = "status-indicator status-error";
+          statusElement.innerHTML = "❌ No valid token configured";
+          moderateBtn.disabled = true;
+        }
+      }
+
+      // Admin Management
+      async function checkAdminStatus() {
+        const token = localStorage.getItem("moderationToken");
         if (!token) {
-          showStatus("Please enter a valid token", "error");
+          hideAdminPanel();
           return;
         }
 
-        authToken = token;
-        sessionStorage.setItem("moderationToken", token);
-        tokenStatus.style.display = "block";
-        uploadSection.classList.remove("hidden");
-        showStatus(
-          "Token set successfully! You can now upload images.",
-          "success"
-        );
+        try {
+          const response = await fetch(`${API_BASE}/auth/tokens/is_admin`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            isAdmin = !!data.is_admin;
+            if (isAdmin) {
+              showAdminPanel();
+              loadTokens();
+            } else {
+              hideAdminPanel();
+            }
+          } else {
+            isAdmin = false;
+            hideAdminPanel();
+          }
+        } catch (error) {
+          isAdmin = false;
+          hideAdminPanel();
+        }
       }
 
-      // Admin functionality
-      setAdminTokenBtn.addEventListener("click", setAdminToken);
-      adminTokenInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") setAdminToken();
-      });
+      function showAdminPanel() {
+        document.getElementById("adminTab").style.display = "block";
+      }
 
-      function setAdminToken() {
-        const token = adminTokenInput.value.trim();
+      function hideAdminPanel() {
+        document.getElementById("adminTab").style.display = "none";
+      }
+
+      async function createToken() {
+        const token = localStorage.getItem("moderationToken");
         if (!token) {
-          showStatus("Please enter a valid admin token", "error");
+          showAlert("Please configure an admin token first", "error");
           return;
         }
 
-        adminToken = token;
-        sessionStorage.setItem("adminToken", token);
-        adminTokenStatus.style.display = "block";
-        adminSection.classList.remove("hidden");
-        showStatus("Admin token set successfully!", "success");
-        refreshTokens();
-      }
-
-      createTokenBtn.addEventListener("click", createNewToken);
-      refreshTokensBtn.addEventListener("click", refreshTokens);
-
-      async function createNewToken() {
-        if (!adminToken) {
-          showStatus("Please set admin token first", "error");
-          return;
-        }
+        const isAdminToken = document.getElementById("isAdminCheck").checked;
 
         try {
           const response = await fetch(`${API_BASE}/auth/tokens`, {
             method: "POST",
             headers: {
+              Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
-              Authorization: `Bearer ${adminToken}`,
             },
             body: JSON.stringify({
-              is_admin: tokenTypeSelect.value === "true",
+              is_admin: isAdminToken,
             }),
           });
 
           if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const errorData = await response.json();
+            throw new Error(errorData.detail || `HTTP ${response.status}`);
           }
 
-          const data = await response.json();
-          showStatus(
-            `New ${
-              tokenTypeSelect.value === "true" ? "admin" : "user"
-            } token created: ${data.token}`,
-            "success"
-          );
-          refreshTokens();
+          const newToken = await response.text();
+          showAlert(`New token created: ${newToken}`, "success");
+
+          document.getElementById("isAdminCheck").checked = false;
+          loadTokens();
         } catch (error) {
-          console.error("Error:", error);
-          showStatus(`Error creating token: ${error.message}`, "error");
+          console.error("Error creating token:", error);
+          showAlert(`Error creating token: ${error.message}`, "error");
         }
       }
 
-      async function refreshTokens() {
-        if (!adminToken) {
-          showStatus("Please set admin token first", "error");
-          return;
-        }
+      async function loadTokens() {
+        const token = localStorage.getItem("moderationToken");
+        if (!token) return;
 
         try {
           const response = await fetch(`${API_BASE}/auth/tokens`, {
+            method: "GET",
             headers: {
-              Authorization: `Bearer ${adminToken}`,
+              Authorization: `Bearer ${token}`,
             },
           });
 
           if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const errorData = await response.json();
+            throw new Error(errorData.detail || `HTTP ${response.status}`);
           }
 
           const tokens = await response.json();
           displayTokens(tokens);
         } catch (error) {
-          console.error("Error:", error);
-          showStatus(`Error fetching tokens: ${error.message}`, "error");
+          console.error("Error loading tokens:", error);
+          showAlert(`Error loading tokens: ${error.message}`, "error");
         }
       }
 
       function displayTokens(tokens) {
+        const tokensList = document.getElementById("tokensList");
+
         if (tokens.length === 0) {
-          tokensList.innerHTML = "<p>No tokens found.</p>";
+          tokensList.innerHTML =
+            '<p style="color: var(--text-secondary); font-style: italic; text-align: center; padding: 2rem;">No tokens found</p>';
           return;
         }
 
         tokensList.innerHTML = tokens
-          .map(
-            (token) => `
-                <div class="token-item">
+          .map((token) => {
+            const createdDate = new Date(token.createdAt).toLocaleString();
+            const badgeClass = token.isAdmin ? "badge-admin" : "badge-user";
+            const badgeText = token.isAdmin ? "👑 Admin" : "👤 User";
+
+            return `
+                <div class="token-item slide-up">
                     <div class="token-info">
                         <div class="token-value">${token.token}</div>
                         <div class="token-meta">
-                            <span class="${
-                              token.isAdmin ? "admin-badge" : "user-badge"
-                            }">
-                                ${token.isAdmin ? "ADMIN" : "USER"}
-                            </span>
-                            <span>Created: ${new Date(
-                              token.createdAt
-                            ).toLocaleString()}</span>
+                            📅 Created: ${createdDate}
+                            <span class="badge ${badgeClass}">${badgeText}</span>
                         </div>
                     </div>
-                    <button class="btn danger" onclick="deleteToken('${
-                      token.token
-                    }')">🗑️ Delete</button>
+                    <button class="btn btn-danger" onclick="deleteToken('${token.token}')">
+                        🗑️ Delete
+                    </button>
                 </div>
-            `
-          )
+            `;
+          })
           .join("");
       }
 
-      async function deleteToken(token) {
-        if (!confirm(`Are you sure you want to delete token: ${token}?`)) {
+      async function deleteToken(tokenToDelete) {
+        if (
+          !confirm(
+            `Are you sure you want to delete this token?\n\n${tokenToDelete}`
+          )
+        ) {
+          return;
+        }
+
+        const adminToken = localStorage.getItem("moderationToken");
+        if (!adminToken) {
+          showAlert("Please configure an admin token first", "error");
           return;
         }
 
         try {
-          const response = await fetch(`${API_BASE}/auth/tokens/${token}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${adminToken}`,
-            },
-          });
+          const response = await fetch(
+            `${API_BASE}/auth/tokens/${tokenToDelete}`,
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${adminToken}`,
+              },
+            }
+          );
 
           if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const errorData = await response.json();
+            throw new Error(errorData.detail || `HTTP ${response.status}`);
           }
 
-          showStatus("Token deleted successfully", "success");
-          refreshTokens();
+          showAlert("Token deleted successfully", "success");
+          loadTokens();
+
+          if (tokenToDelete === adminToken) {
+            clearToken();
+          }
         } catch (error) {
-          console.error("Error:", error);
-          showStatus(`Error deleting token: ${error.message}`, "error");
+          console.error("Error deleting token:", error);
+          showAlert(`Error deleting token: ${error.message}`, "error");
         }
       }
 
-      // File upload handling
-      uploadArea.addEventListener("click", () => fileInput.click());
-      uploadArea.addEventListener("dragover", handleDragOver);
-      uploadArea.addEventListener("dragleave", handleDragLeave);
-      uploadArea.addEventListener("drop", handleDrop);
-      fileInput.addEventListener("change", handleFileSelect);
-
-      function handleDragOver(e) {
-        e.preventDefault();
-        uploadArea.classList.add("dragover");
+      // File Upload Handling
+      function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (file) {
+          processFile(file);
+        }
       }
 
-      function handleDragLeave(e) {
-        e.preventDefault();
-        uploadArea.classList.remove("dragover");
-      }
+      function handleDrop(event) {
+        event.preventDefault();
+        event.stopPropagation();
 
-      function handleDrop(e) {
-        e.preventDefault();
+        const uploadArea = event.currentTarget;
         uploadArea.classList.remove("dragover");
-        const files = e.dataTransfer.files;
+
+        const files = event.dataTransfer.files;
         if (files.length > 0) {
-          selectFile(files[0]);
+          processFile(files[0]);
         }
       }
 
-      function handleFileSelect(e) {
-        if (e.target.files.length > 0) {
-          selectFile(e.target.files[0]);
-        }
+      function handleDragOver(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.currentTarget.classList.add("dragover");
       }
 
-      function selectFile(file) {
+      function handleDragLeave(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.currentTarget.classList.remove("dragover");
+      }
+
+      function processFile(file) {
         if (!file.type.startsWith("image/")) {
-          showStatus("Please select a valid image file", "error");
+          showAlert("Please select a valid image file", "error");
           return;
         }
 
         selectedFile = file;
-        uploadArea.innerHTML = `
-                <div class="upload-icon">✅</div>
-                <div class="upload-text">
-                    <strong>${file.name}</strong><br>
-                    <small>${(file.size / 1024 / 1024).toFixed(2)} MB</small>
-                </div>
-            `;
-        moderateBtn.disabled = false;
-        showStatus(`File "${file.name}" selected successfully`, "success");
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const previewContainer = document.getElementById("previewContainer");
+          const previewImage = document.getElementById("previewImage");
+
+          previewImage.src = e.target.result;
+          previewContainer.style.display = "block";
+          previewContainer.classList.add("fade-in");
+        };
+        reader.readAsDataURL(file);
+
+        const token = localStorage.getItem("moderationToken");
+        if (token) {
+          document.getElementById("moderateBtn").disabled = false;
+        }
       }
 
-      // Moderate image
-      moderateBtn.addEventListener("click", moderateImage);
-
+      // Image Moderation
       async function moderateImage() {
-        if (!selectedFile || !authToken) {
-          showStatus("Please select a file and set a token", "error");
+        if (!selectedFile) {
+          showAlert("Please select an image first", "error");
           return;
         }
 
-        moderateBtn.disabled = true;
-        moderateBtn.textContent = "Analyzing...";
+        const token = localStorage.getItem("moderationToken");
+        if (!token) {
+          showAlert("Please configure a token first", "error");
+          return;
+        }
 
-        const formData = new FormData();
-        formData.append("file", selectedFile);
+        const loading = document.getElementById("loading");
+        const moderateBtn = document.getElementById("moderateBtn");
+
+        loading.style.display = "block";
+        moderateBtn.disabled = true;
 
         try {
+          const formData = new FormData();
+          formData.append("file", selectedFile);
+
           const response = await fetch(`${API_BASE}/moderate`, {
             method: "POST",
             headers: {
-              Authorization: `Bearer ${authToken}`,
+              Authorization: `Bearer ${token}`,
             },
             body: formData,
           });
 
+          if (response.status === 401) {
+            showAlert("Unauthorized token. Please check your token.", "error");
+            clearToken();
+            throw new Error("Unauthorized");
+          }
+
           if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const errorData = await response.json();
+            throw new Error(errorData.detail || `HTTP ${response.status}`);
           }
 
           const data = await response.json();
           displayResults(data.result);
-          showStatus("Image analysis completed successfully!", "success");
         } catch (error) {
           console.error("Error:", error);
-          showStatus(`Error: ${error.message}`, "error");
+          showAlert(`Error: ${error.message}`, "error");
         } finally {
+          loading.style.display = "none";
           moderateBtn.disabled = false;
-          moderateBtn.textContent = "Analyze Image";
         }
       }
 
-      function displayResults(scores) {
-        scoresContainer.innerHTML = "";
+      function displayResults(results) {
+        const resultsCard = document.getElementById("resultsCard");
+        const resultsGrid = document.getElementById("resultsGrid");
 
-        Object.entries(scores).forEach(([category, score]) => {
-          const scoreLevel =
-            score < 0.3 ? "low" : score < 0.7 ? "medium" : "high";
-          const percentage = Math.round(score * 100);
+        resultsGrid.innerHTML = "";
 
-          const scoreItem = document.createElement("div");
-          scoreItem.className = "score-item";
-          scoreItem.innerHTML = `
-                    <span class="score-label">${category.replace(
-                      "_",
-                      " "
-                    )}</span>
-                    <div style="display: flex; align-items: center;">
-                        <span class="score-value ${scoreLevel}">${percentage}%</span>
-                        <div class="score-bar">
-                            <div class="score-fill ${scoreLevel}" style="width: ${percentage}%"></div>
-                        </div>
-                    </div>
-                `;
-          scoresContainer.appendChild(scoreItem);
+        const categories = ["hate", "self_harm", "sexual", "violence"];
+        const labels = {
+          hate: "Hate Speech",
+          self_harm: "Self Harm",
+          sexual: "Sexual Content",
+          violence: "Violence",
+        };
+
+        categories.forEach((category) => {
+          const value = results[category] || 0;
+          const percentage = Math.round(value * 100);
+
+          const resultCard = document.createElement("div");
+          resultCard.className = "result-card slide-up";
+
+          resultCard.innerHTML = `
+                <div class="result-label">${labels[category]}</div>
+                <div class="result-value">${percentage}%</div>
+                <div class="result-bar">
+                    <div class="result-fill" style="width: ${percentage}%"></div>
+                </div>
+            `;
+
+          resultsGrid.appendChild(resultCard);
         });
 
-        results.style.display = "block";
-        results.scrollIntoView({ behavior: "smooth" });
+        resultsCard.style.display = "block";
+        resultsCard.classList.add("fade-in");
+
+        resultsCard.scrollIntoView({ behavior: "smooth" });
+        showAlert("Image analysis completed successfully!", "success");
       }
 
-      function showStatus(message, type) {
-        status.textContent = message;
-        status.className = `status ${type}`;
-        status.style.display = "block";
+      function showAlert(message, type) {
+        const alertContainer = document.getElementById("alertContainer");
+
+        const alert = document.createElement("div");
+        alert.className = `alert alert-${type} fade-in`;
+        alert.innerHTML = `
+            ${type === "success" ? "✅" : "❌"} ${message}
+        `;
+
+        alertContainer.innerHTML = "";
+        alertContainer.appendChild(alert);
 
         setTimeout(() => {
-          status.style.display = "none";
+          if (alert.parentNode) {
+            alert.style.opacity = "0";
+            setTimeout(() => {
+              if (alert.parentNode) {
+                alert.parentNode.removeChild(alert);
+              }
+            }, 300);
+          }
         }, 5000);
       }
     </script>

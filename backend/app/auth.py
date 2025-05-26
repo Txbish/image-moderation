@@ -43,6 +43,19 @@ async def create_token(
     })
     return token
 
+@router.get("/tokens/is_admin")
+async def is_admin_token(
+    authorization: str = Header(...),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    check_db(db)
+    token = authorization.replace("Bearer ", "")
+    token_doc = await db.tokens.find_one({"token": token})
+    if not token_doc:
+        raise HTTPException(status_code=404, detail="Token not found")
+    return {"is_admin": token_doc.get("isAdmin", False)}
+
+
 @router.get("/tokens")
 async def list_tokens(admin_token: str = Depends(get_admin_token),db: AsyncIOMotorDatabase = Depends(get_db)):
     check_db(db)
