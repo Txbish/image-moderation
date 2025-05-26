@@ -40,7 +40,7 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./backend
           file: ./backend/Dockerfile  
           tags: image-moderation:latest
           push: ${{ github.event_name == 'push' }}
