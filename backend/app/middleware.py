@@ -19,6 +19,7 @@ async def log_usage(request: Request, call_next):
     
     timestamp = datetime.now(timezone.utc)
     
+    endpoint = request.url.path
     
     if db is not None:
         try:
