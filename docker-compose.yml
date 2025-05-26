@@ -1,12 +1,12 @@
-version: "3.9"
-
 services:
   backend:
     build: ./backend
     ports:
       - "7000:7000"
     environment:
-      - MONGODB_URL=${MONGODB_URL}
+      - MONGO_URI=${MONGO_URI}
+      - CONTENT_SAFETY_KEY=${CONTENT_SAFETY_KEY}
+      - CONTENT_SAFETY_ENDPOINT=${CONTENT_SAFETY_ENDPOINT}
     volumes:
       - ./backend:/app
     working_dir: /app
