@@ -34,13 +34,5 @@ jobs:
           pip install flake8
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./backend
-          file: ./backend/Dockerfile  
-          tags: image-moderation:latest
-          push: ${{ github.event_name == 'push' }}
+      - name: Build Docker image (optional)
+        run: docker build -t image-moderation backend/.
