@@ -1,183 +1,233 @@
-# Image Moderation FastAPI
+<div align="center">
 
-A secure REST API built with FastAPI that automatically detects and analyzes harmful, illegal, or unwanted imagery using Azure Content Safety services. The system provides content moderation capabilities with token-based authentication and comprehensive usage tracking.
+# 🛡️ Image Moderation API
 
-## Features
+### Intelligent Content Safety with Azure AI
 
-- **Image Content Analysis**: Automatically detect and score harmful content including:
-  - Hate symbols and content
-  - Self-harm depictions
-  - Sexual content
-  - Violence and graphic content
-- **Token-based Authentication**: Secure bearer token system with admin and user roles
-- **Usage Tracking**: Complete audit trail of API usage per token
-- **Admin Management**: Full token lifecycle management for administrators
-- **MongoDB Integration**: Efficient data storage and retrieval
-- **Docker Containerization**: Easy deployment with Docker and Docker Compose
-- **CORS Support**: Cross-origin requests enabled for frontend integration
+_A powerful FastAPI service that automatically detects harmful, illegal, or unwanted imagery using Azure Content Safety services._
 
-## System Architecture
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Python](https://img.shields.io/badge/python-3.8+-blue.svg?style=for-the-badge&logo=python)](https://www.python.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Azure](https://img.shields.io/badge/Microsoft_Azure-0089D0?style=for-the-badge&logo=microsoft-azure&logoColor=white)](https://azure.microsoft.com/)
+[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
-The system consists of:
+[🚀 Quick Start](#-quick-start) • [📖 Documentation](#-api-documentation) • [🔧 Setup Guide](#-setup-guide) • [💡 Examples](#-examples)
 
-- **FastAPI Backend**: Main API server handling authentication and moderation
-- **MongoDB Database**: Stores tokens and usage logs
-- **Azure Content Safety**: External service for image analysis
-- **Nginx Frontend**: Simple web interface for API interaction
+</div>
 
-## Prerequisites
+---
 
-Before running the application, ensure you have:
+## ✨ Features
 
-### Required Software
+<table>
+<tr>
+<td width="50%">
 
-- **Python 3.8+**
-- **Docker & Docker Compose**
-- **Git**
-- **MongoDB** (if running locally without Docker)
+### 🔍 **Smart Content Analysis**
 
-### Required Accounts & Services
+- 🚫 Hate symbols & content detection
+- ⚠️ Self-harm content identification
+- 🔞 Sexual content recognition
+- ⚔️ Violence & graphic content analysis
 
-- **MongoDB Atlas Account** (for cloud database) OR local MongoDB installation
-- **Azure Account** with Content Safety service enabled
+</td>
+<td width="50%">
 
-## Installation & Setup
+### 🔐 **Security & Management**
 
-### 1. Clone the Repository
+- 🔑 Token-based authentication
+- 👑 Admin & user role system
+- 📊 Complete usage tracking
+- 🗄️ MongoDB integration
+
+</td>
+</tr>
+</table>
+
+### 🏗️ **Additional Benefits**
+
+- 🐳 **Docker Ready** - One-command deployment
+- 🌐 **CORS Enabled** - Frontend integration ready
+- 📝 **Auto Documentation** - Interactive API docs
+- ⚡ **Fast & Scalable** - Built on FastAPI
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TB
+    A[🌐 Frontend UI] --> B[⚡ FastAPI Backend]
+    B --> C[🗄️ MongoDB Database]
+    B --> D[🧠 Azure Content Safety]
+    B --> E[📊 Usage Analytics]
+
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+    style D fill:#fff3e0
+    style E fill:#fce4ec
+```
+
+---
+
+## 🚀 Quick Start
+
+### 🐳 **Option 1: Docker (Recommended)**
 
 ```bash
+# Clone and run in 3 commands
 git clone https://github.com/Txbish/image-moderation.git
-cd image-moderation-api
-```
-
-### 2. Environment Configuration
-
-Copy the example environment file and fill in your credentials:
-
-```bash
-cp .env.example .env
-```
-
-Edit the `.env` file and replace the placeholder values with your actual credentials:
-
-- `MONGO_URI` - Your MongoDB connection string
-- `CONTENT_SAFETY_KEY` - Your Azure Content Safety API key
-- `CONTENT_SAFETY_ENDPOINT` - Your Azure Content Safety endpoint URL
-
-## Getting Required API Keys & Services
-
-### MongoDB Setup
-
-#### Option 1: MongoDB Atlas (Recommended)
-
-1. Visit [MongoDB Atlas](https://www.mongodb.com/atlas)
-2. Create a free account
-3. Create a new cluster
-4. Go to "Database Access" → Create database user
-5. Go to "Network Access" → Add IP address (0.0.0.0/0 for development)
-6. Go to "Clusters" → Click "Connect" → "Connect your application"
-7. Copy the connection string and replace `<password>` with your database user password
-8. Use this as your `MONGO_URI`
-
-#### Option 2: Local MongoDB
-
-1. Install MongoDB locally
-2. Start MongoDB service
-3. Use `MONGO_URI=mongodb://localhost:27017/image_moderation`
-
-### Azure Content Safety Setup
-
-1. **Create Azure Account**
-
-   - Visit [Azure Portal](https://portal.azure.com)
-   - Sign up for free account (includes $200 credit)
-
-2. **Create Content Safety Resource**
-
-   - In Azure Portal, click "Create a resource"
-   - Search for "Content Safety"
-   - Click "Create" → "Content Safety"
-   - Fill in required details:
-     - Subscription: Your subscription
-     - Resource Group: Create new or use existing
-     - Region: Choose nearest region
-     - Name: Unique name for your resource
-     - Pricing Tier: Free tier available
-
-3. **Get Keys and Endpoint**
-   - After deployment, go to your Content Safety resource
-   - Navigate to "Keys and Endpoint" section
-   - Copy `Key 1` as your `CONTENT_SAFETY_KEY`
-   - Copy `Endpoint` as your `CONTENT_SAFETY_ENDPOINT`
-
-## Running the Application
-
-### Method 1: Using Docker (Recommended)
-
-1. **Build and start all services:**
-
-```bash
+cd image-moderation
 docker-compose up --build
 ```
 
-2. **Access the services:**
-   - Backend API: http://localhost:7000
-   - Frontend UI: http://localhost:80
-   - API Documentation: http://localhost:7000/docs
+> 🎉 **That's it!** Your API is running at `http://localhost:7000`
 
-### Method 2: Using Uvicorn (Development)
-
-1. **Install Python dependencies:**
+### 🐍 **Option 2: Python Development**
 
 ```bash
+# Setup environment
 cd backend
 pip install -r requirements.txt
-```
 
-2. **Start the FastAPI server:**
-
-```bash
-# From the backend directory
+# Launch server
 uvicorn app.main:app --host 0.0.0.0 --port 7000 --reload
 ```
 
-3. **Access the API:**
-   - API Server: http://localhost:7000
-   - Interactive Documentation: http://localhost:7000/docs
-   - ReDoc Documentation: http://localhost:7000/redoc
+---
 
-## API Usage
+## 🔧 Setup Guide
 
-### Authentication
+### 📋 **Prerequisites**
 
-The system includes pre-seeded tokens for immediate testing:
+<details>
+<summary>🖥️ <strong>Required Software</strong></summary>
 
-- **Admin Token**: `admin-seed-token` (can manage other tokens)
-- **User Token**: `user-seed-token` (can only moderate images)
+- ✅ **Python 3.8+**
+- ✅ **Docker & Docker Compose**
+- ✅ **Git**
+- ✅ **MongoDB** (local or Atlas)
 
-### Available Endpoints
+</details>
 
-#### Authentication Endpoints (Admin Only)
+<details>
+<summary>☁️ <strong>Cloud Services</strong></summary>
 
-- `POST /auth/tokens` - Create new token
-- `GET /auth/tokens` - List all tokens
-- `GET /auth/tokens/is_admin` - Check if token has admin privileges
-- `DELETE /auth/tokens/{token}` - Delete specific token
+- 🍃 **MongoDB Atlas Account** (free tier available)
+- 🔵 **Azure Account** with Content Safety service
 
-#### Moderation Endpoint
+</details>
 
-- `POST /moderate` - Upload and analyze image content
+### ⚙️ **Environment Configuration**
 
-### Example API Calls
+1. **Copy environment template:**
 
-#### Check Admin Status
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Fill in your credentials:**
+
+   ```bash
+   # MongoDB connection
+   MONGO_URI=your_mongodb_connection_string
+
+   # Azure Content Safety
+   CONTENT_SAFETY_KEY=your_azure_content_safety_key
+   CONTENT_SAFETY_ENDPOINT=your_azure_endpoint_url
+   ```
+
+---
+
+## 🔑 Getting API Keys
+
+### 🍃 **MongoDB Atlas Setup**
+
+<details>
+<summary>📖 <strong>Step-by-step MongoDB Atlas guide</strong></summary>
+
+1. 🌐 Visit [MongoDB Atlas](https://www.mongodb.com/atlas)
+2. 📝 Create free account
+3. 🗄️ Create new cluster
+4. 👤 **Database Access** → Create database user
+5. 🌍 **Network Access** → Add IP (0.0.0.0/0 for development)
+6. 🔗 **Clusters** → Connect → **Connect your application**
+7. 📋 Copy connection string and replace `<password>`
+
+**Connection string format:**
+
+```
+mongodb+srv://username:password@cluster.mongodb.net/image_moderation
+```
+
+</details>
+
+### 🔵 **Azure Content Safety Setup**
+
+<details>
+<summary>📖 <strong>Step-by-step Azure guide</strong></summary>
+
+1. 🌐 Visit [Azure Portal](https://portal.azure.com)
+2. 💳 Sign up (free $200 credit included)
+3. ➕ **Create a resource** → Search "Content Safety"
+4. 📝 Configure:
+   - **Subscription:** Your subscription
+   - **Resource Group:** Create new
+   - **Region:** Choose nearest
+   - **Pricing:** Free tier available
+5. 🔑 **Keys and Endpoint** → Copy `Key 1` and `Endpoint`
+
+</details>
+
+---
+
+## 🌐 Access Points
+
+Once running, access these services:
+
+| Service            | URL                         | Description               |
+| ------------------ | --------------------------- | ------------------------- |
+| 🖥️ **Frontend UI** | http://localhost:80         | Web interface             |
+| ⚡ **Backend API** | http://localhost:7000       | Main API server           |
+| 📖 **API Docs**    | http://localhost:7000/docs  | Interactive documentation |
+| 📚 **ReDoc**       | http://localhost:7000/redoc | Alternative documentation |
+
+---
+
+## 💡 Examples
+
+### 🔑 **Pre-seeded Tokens**
+
+| Token              | Type     | Capabilities                  |
+| ------------------ | -------- | ----------------------------- |
+| `admin-seed-token` | 👑 Admin | Token management + moderation |
+| `user-seed-token`  | 👤 User  | Image moderation only         |
+
+### 📝 **API Examples**
+
+<details>
+<summary>🔍 <strong>Check Admin Status</strong></summary>
 
 ```bash
 curl -X GET "http://localhost:7000/auth/tokens/is_admin" \
      -H "Authorization: Bearer admin-seed-token"
 ```
 
-#### Create New Token
+**Response:**
+
+```json
+{
+  "is_admin": true,
+  "token": "admin-seed-token"
+}
+```
+
+</details>
+
+<details>
+<summary>➕ <strong>Create New Token</strong></summary>
 
 ```bash
 curl -X POST "http://localhost:7000/auth/tokens" \
@@ -186,7 +236,20 @@ curl -X POST "http://localhost:7000/auth/tokens" \
      -d '{"is_admin": false}'
 ```
 
-#### Moderate Image
+**Response:**
+
+```json
+{
+  "token": "new-uuid-token-here",
+  "is_admin": false,
+  "created_at": "2025-05-26T10:30:00Z"
+}
+```
+
+</details>
+
+<details>
+<summary>🖼️ <strong>Moderate Image</strong></summary>
 
 ```bash
 curl -X POST "http://localhost:7000/moderate" \
@@ -194,9 +257,7 @@ curl -X POST "http://localhost:7000/moderate" \
      -F "file=@/path/to/your/image.jpg"
 ```
 
-## API Response Format
-
-### Moderation Response
+**Response:**
 
 ```json
 {
@@ -205,18 +266,53 @@ curl -X POST "http://localhost:7000/moderate" \
     "self_harm": 0.0,
     "sexual": 0.29,
     "violence": 0.43
+  },
+  "analysis": {
+    "timestamp": "2025-05-26T10:30:00Z",
+    "filename": "image.jpg",
+    "status": "analyzed"
   }
 }
 ```
 
-Scores range from 0.0 to 1.0, where:
+</details>
 
-- 0.0 = No harmful content detected
-- 1.0 = High confidence of harmful content
+---
 
-## Database Collections
+## 📊 API Reference
 
-### tokens Collection
+### 🔐 **Authentication Endpoints**
+
+| Method   | Endpoint                | Access   | Description        |
+| -------- | ----------------------- | -------- | ------------------ |
+| `POST`   | `/auth/tokens`          | 👑 Admin | Create new token   |
+| `GET`    | `/auth/tokens`          | 👑 Admin | List all tokens    |
+| `GET`    | `/auth/tokens/is_admin` | 🔑 Any   | Check admin status |
+| `DELETE` | `/auth/tokens/{token}`  | 👑 Admin | Delete token       |
+
+### 🛡️ **Moderation Endpoints**
+
+| Method | Endpoint    | Access | Description           |
+| ------ | ----------- | ------ | --------------------- |
+| `POST` | `/moderate` | 🔑 Any | Analyze image content |
+
+### 📈 **Score Interpretation**
+
+| Score Range | Meaning                     | Action               |
+| ----------- | --------------------------- | -------------------- |
+| `0.0 - 0.2` | 🟢 Safe content             | ✅ Allow             |
+| `0.2 - 0.5` | 🟡 Potentially questionable | ⚠️ Review            |
+| `0.5 - 0.8` | 🟠 Likely harmful           | 🚫 Block             |
+| `0.8 - 1.0` | 🔴 High confidence harmful  | 🚨 Block immediately |
+
+---
+
+## 🗄️ Database Schema
+
+<details>
+<summary>📋 <strong>Collections Structure</strong></summary>
+
+### `tokens` Collection
 
 ```javascript
 {
@@ -227,132 +323,150 @@ Scores range from 0.0 to 1.0, where:
 }
 ```
 
-### usages Collection
+### `usages` Collection
 
 ```javascript
 {
   "_id": ObjectId,
   "token": "uuid-string",
   "endpoint": "/moderate",
-  "timestamp": datetime
+  "timestamp": datetime,
+  "metadata": {
+    "filename": "string",
+    "filesize": number
+  }
 }
 ```
 
-## Development
+</details>
 
-### Project Structure
+---
+
+## 🔧 Development
+
+### 📁 **Project Structure**
 
 ```
-image-moderation-api/
-├── backend/
-│   ├── app/
-│   │   ├── main.py
-│   │   ├── auth.py
-│   │   ├── moderate.py
-│   │   ├── middleware.py
-│   │   └── db.py
-│   ├── requirements.txt
-│   └── Dockerfile
-├── frontend/
-│   └── index.html
-├── docker-compose.yml
-├── .env.example
-└── README.md
+image-moderation/
+├── 🚀 backend/
+│   ├── 📦 app/
+│   │   ├── 🏠 main.py
+│   │   ├── 🔐 auth.py
+│   │   ├── 🛡️ moderate.py
+│   │   ├── ⚙️ middleware.py
+│   │   └── 🗄️ db.py
+│   ├── 📋 requirements.txt
+│   └── 🐳 Dockerfile
+├── 🌐 frontend/
+│   └── 📄 index.html
+├── 🐳 docker-compose.yml
+├── ⚙️ .env.example
+└── 📖 README.md
 ```
 
-### Adding Dependencies
+### 🔧 **Development Commands**
 
 ```bash
-cd backend
-pip install new-package
+# Add new dependency
+cd backend && pip install new-package
 pip freeze > requirements.txt
-```
 
-### Running Tests
-
-```bash
-cd backend
+# Run tests
 pytest
-```
 
-## Troubleshooting
-
-### Common Issues
-
-1. **MongoDB Connection Failed**
-
-   - Verify `MONGO_URI` is correct
-   - Check network access settings in MongoDB Atlas
-   - Ensure database user has proper permissions
-
-2. **Azure Content Safety Errors**
-
-   - Verify `CONTENT_SAFETY_KEY` and `CONTENT_SAFETY_ENDPOINT` are correct
-   - Check Azure subscription status
-   - Ensure Content Safety service is active
-
-3. **Docker Issues**
-
-   - Ensure Docker daemon is running
-   - Check port conflicts (7000, 80)
-   - Verify `.env` file exists and is properly formatted
-
-4. **Token Authentication Errors**
-   - Ensure `Authorization: Bearer <token>` header is included
-   - Verify token exists in database
-   - Check if endpoint requires admin privileges
-
-### Logs and Debugging
-
-View application logs:
-
-```bash
-# Docker logs
+# View logs
 docker-compose logs backend
-docker-compose logs frontend
-
-# Direct uvicorn logs
-# Logs appear in terminal when running with --reload
 ```
 
-## Production Deployment
+---
 
-For production deployment:
+## 🚨 Troubleshooting
 
-1. **Security Considerations**
+<details>
+<summary>🔍 <strong>Common Issues & Solutions</strong></summary>
 
-   - Use strong, unique tokens
-   - Enable HTTPS/TLS
-   - Implement rate limiting
-   - Use production MongoDB cluster
-   - Restrict CORS origins
+### 🗄️ **MongoDB Connection Failed**
 
-2. **Environment Variables**
+- ✅ Verify `MONGO_URI` format
+- ✅ Check MongoDB Atlas network access
+- ✅ Ensure database user permissions
 
-   - Use secure secret management
-   - Never commit `.env` to version control
-   - Use environment-specific configurations
+### 🔵 **Azure Content Safety Errors**
 
-3. **Monitoring**
-   - Set up application monitoring
-   - Monitor Azure Content Safety usage/quotas
-   - Track database performance
+- ✅ Verify API key and endpoint
+- ✅ Check Azure subscription status
+- ✅ Ensure service quota isn't exceeded
 
-## Contributing
+### 🐳 **Docker Issues**
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- ✅ Check if Docker daemon is running
+- ✅ Verify ports 7000 and 80 are available
+- ✅ Ensure `.env` file exists
 
-## License
+### 🔑 **Authentication Errors**
 
-This project is licensed under the MIT License.
+- ✅ Include `Authorization: Bearer <token>` header
+- ✅ Verify token exists in database
+- ✅ Check if endpoint requires admin privileges
 
-## Support
+</details>
 
-For support and questions:
+---
 
-- Review Azure Content Safety documentation
-- MongoDB Atlas documentation for database issues
+## 🚀 Production Deployment
+
+### 🔒 **Security Checklist**
+
+- [ ] 🔐 Use strong, unique tokens
+- [ ] 🌐 Enable HTTPS/TLS
+- [ ] ⏱️ Implement rate limiting
+- [ ] 🗄️ Use production MongoDB cluster
+- [ ] 🌍 Restrict CORS origins
+- [ ] 🔐 Use secure secret management
+
+### 📊 **Monitoring**
+
+- [ ] 📈 Application performance monitoring
+- [ ] 💰 Azure Content Safety usage tracking
+- [ ] 🗄️ Database performance metrics
+- [ ] 🚨 Error alerting system
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how to get started:
+
+1. 🍴 **Fork** the repository
+2. 🌿 **Create** feature branch (`git checkout -b feature/amazing-feature`)
+3. 💾 **Commit** changes (`git commit -m 'Add amazing feature'`)
+4. 📤 **Push** to branch (`git push origin feature/amazing-feature`)
+5. 🔃 **Open** a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 💬 Support & Community
+
+<div align="center">
+
+### Need Help?
+
+📖 **Documentation** • 💬 **Discussions** • 🐛 **Issues** • 📧 **Contact**
+
+### Useful Resources
+
+- 📚 [Azure Content Safety Docs](https://docs.microsoft.com/en-us/azure/cognitive-services/content-safety/)
+- 🍃 [MongoDB Atlas Documentation](https://docs.atlas.mongodb.com/)
+- ⚡ [FastAPI Documentation](https://fastapi.tiangolo.com/)
+
+---
+
+**Made with ❤️ for safer digital content**
+
+</div>
