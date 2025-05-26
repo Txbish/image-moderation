@@ -34,6 +34,13 @@ jobs:
           pip install flake8
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-      #to make sure that the image is stable and can be deployed
-      - name: Build Docker image (optional)
-        run: docker build -t image-moderation .
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./backend/Dockerfile  
+          tags: image-moderation:latest
+          push: ${{ github.event_name == 'push' }}
