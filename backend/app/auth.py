@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Header, Depends
 from app.db import get_db
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from bson import ObjectId
@@ -39,9 +39,9 @@ async def create_token(
     await db.tokens.insert_one({
         "token": token,
         "isAdmin": req.is_admin,
-        "createdAt": datetime.now(datetime.timezone.utc)
+        "createdAt": datetime.now(timezone.utc)
     })
-    return [serialize_token(token)]
+    return token
 
 @router.get("/tokens")
 async def list_tokens(admin_token: str = Depends(get_admin_token),db: AsyncIOMotorDatabase = Depends(get_db)):
